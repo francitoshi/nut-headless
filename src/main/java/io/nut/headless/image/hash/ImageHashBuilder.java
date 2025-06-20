@@ -21,8 +21,8 @@
 package io.nut.headless.image.hash;
 
 import io.nut.base.crypto.Digest;
+import io.nut.base.util.Byter;
 import io.nut.base.util.Hash;
-import io.nut.base.util.Utils;
 import io.nut.headless.image.ScaleDimension;
 import io.nut.headless.image.SimpleScaleDimension;
 import io.nut.headless.imageio.ScaleImage;
@@ -116,7 +116,7 @@ public class ImageHashBuilder
         }
         if(colorThreshold > 0)
         {
-            byte[]hash = Utils.asBytes(pixels);
+            byte[]hash = Byter.bytes(pixels);
             int hc = (w*h) + (w-h);
             System.out.println(Arrays.toString(hash));
             return new StickyImageHash(w, h, hc, hash, colorThreshold, countThresold);
@@ -128,6 +128,6 @@ public class ImageHashBuilder
     }
     protected static byte[] buildDigest(int[] pixels)
     {
-        return Digest.sha256(Utils.asBytes(pixels));
+        return Digest.sha256(Byter.bytes(pixels));
     }
 }
