@@ -1,7 +1,7 @@
 /*
  *  NameFileFilter.java
  *
- *  Copyright (C) 2009-2023 francitoshi@gmail.com
+ *  Copyright (C) 2009-2025 francitoshi@gmail.com
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 package io.nut.headless.io;
 
-import io.tea.base.util.regex.RegExs;
+import io.nut.base.util.regex.RegExs;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
