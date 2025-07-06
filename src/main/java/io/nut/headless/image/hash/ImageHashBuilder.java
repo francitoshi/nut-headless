@@ -1,7 +1,7 @@
 /*
  *  ImageHashBuilder.java
  *
- *  Copyright (C) 2010-2024 francitoshi@gmail.com
+ *  Copyright (C) 2010-2025 francitoshi@gmail.com
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 package io.nut.headless.image.hash;
 
 import io.nut.base.crypto.Digest;
+import io.nut.base.crypto.Kripto;
+import io.nut.base.crypto.Kripto.MessageDigestAlgorithm;
 import io.nut.base.util.Byter;
 import io.nut.base.util.Hash;
 import io.nut.headless.image.ScaleDimension;
@@ -46,6 +48,7 @@ public class ImageHashBuilder
 {
     private static final AtomicInteger count = new AtomicInteger();
     private static final VirtualFilePool pool = new VirtualFilePool();
+    private static final Digest SHA256 = new Digest(null, MessageDigestAlgorithm.SHA256);
 
     private final ScaleImage scale;
     private final float colorThreshold;
@@ -128,6 +131,6 @@ public class ImageHashBuilder
     }
     protected static byte[] buildDigest(int[] pixels)
     {
-        return Digest.sha256(Byter.bytes(pixels));
+        return SHA256.digest(Byter.bytes(pixels));
     }
 }

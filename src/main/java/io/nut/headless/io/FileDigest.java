@@ -38,6 +38,8 @@ import org.apache.commons.compress.archivers.ArchiveException;
  */
 public class FileDigest
 {
+    public static final String SHA256 = "SHA256";
+    
     private static int defBufSize = 256*1024;
     private final int bufSize = defBufSize;
     private final Object lock = new Object();

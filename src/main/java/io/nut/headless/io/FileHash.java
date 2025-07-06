@@ -20,7 +20,6 @@
  */
 package io.nut.headless.io;
 
-import io.nut.base.crypto.Digest;
 import io.nut.base.util.Hash;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.io.FileNotFoundException;
@@ -177,7 +176,7 @@ public class FileHash implements Comparable<FileHash>, Hash
         {
             if (digest == null)
             {
-                MessageDigest md = MessageDigest.getInstance(Digest.SHA256);
+                MessageDigest md = MessageDigest.getInstance(FileDigest.SHA256);
                 digest = new FileDigest(file, md);
             }
             return digest;

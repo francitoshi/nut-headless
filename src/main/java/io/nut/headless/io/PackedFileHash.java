@@ -387,7 +387,7 @@ public class PackedFileHash
         {
             if (digest == null)
             {
-                MessageDigest md = MessageDigest.getInstance(Digest.SHA256);
+                MessageDigest md = MessageDigest.getInstance(FileDigest.SHA256);
                 digest = new FileDigest(file, md);
             }
             return digest;
