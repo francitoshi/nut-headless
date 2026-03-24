@@ -1,7 +1,7 @@
 /*
  *  ForEachFile.java
  *
- *  Copyright (C) 2007-2024 francitoshi@gmail.com
+ *  Copyright (C) 2007-2026 francitoshi@gmail.com
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,36 +38,12 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 
-class CachedFile extends File
-{
-    boolean directory = false;
-    boolean directoryCached = false;
-
-    public CachedFile(String pathname)
-    {
-        super(pathname);
-    }
-
-    @Override
-    public boolean isDirectory()
-    {
-        if (!directoryCached)
-        {
-            directory = super.isDirectory();
-            directoryCached = true;
-        }
-        return directory;
-    }
-}
-
-/**
- *
- * @author franci
- */
 public abstract class ForEachFile implements Runnable
 {
-
-    private static int bufSize = 64 * 1024;
+    private static final OSName OS = OSName.getInstance();
+    private static final int BUF_SIZE = 64*1024;
+            
+    public final int bufSize;
     private final VirtualFile[] base;
     private final ForEachFileOptions options;
     private final VirtualFileFilter filter;
@@ -81,44 +57,39 @@ public abstract class ForEachFile implements Runnable
         return new ForEachFileOptions(options);
     }
 
-    public static int getBufSize()
-    {
-        return bufSize;
-    }
-
-    public static void setBufSize(int bufSize)
-    {
-        ForEachFile.bufSize = bufSize;
-    }
-
     public ForEachFile(File[] files, FileFilter filter, ForEachFileOptions opt) throws IOException
     {
-        this(VirtualFile.asVirtualFile(files),VirtualFile.buildFilter(filter), opt);
+        this(VirtualFile.asVirtualFile(files),VirtualFile.buildFilter(filter), opt, BUF_SIZE);
     }
     public ForEachFile(VirtualFile[] files, VirtualFileFilter filter, ForEachFileOptions opt) throws IOException
     {
+        this(files, filter, opt, BUF_SIZE);
+    }
+    public ForEachFile(VirtualFile[] files, VirtualFileFilter filter, ForEachFileOptions opt, int bufSize) throws IOException
+    {
+        this.bufSize = bufSize;
         options = opt == null ? new ForEachFileOptions() : new ForEachFileOptions(opt);
         this.base = files;
         this.filter = filter;
         this.coveredPath = new CoveredPath(options.symlinks);
 
-        if (OSName.os.isPosix())
+        if(OS.isPosix())
         {
             autoOmitPaths.add(new File(File.separator + "dev"));
             autoOmitPaths.add(new File(File.separator + "tmp"));
             autoOmitPaths.add(new File(File.separator + "lost+found"));
         }
-        if (OSName.os.isLinux() || OSName.os.isSolaris())
+        if(OS.isLinux() || OS.isSolaris())
         {
             autoOmitPaths.add(new File(File.separator + "proc"));
         }
-        if (OSName.os.isLinux())
+        if (OS.isLinux())
         {
             autoOmitPaths.add(new File(File.separator + "sys"));
             autoOmitPaths.add(new File(File.separator + "var" + File.separator + "run"));
             autoOmitPaths.add(new File(File.separator + "var" + File.separator + "lock"));
         }
-        if (OSName.os.isSolaris())
+        if (OS.isSolaris())
         {
             autoOmitPaths.add(new File(File.separator + "devices"));
         }
@@ -425,5 +396,4 @@ public abstract class ForEachFile implements Runnable
         }
         return true;
     }
-
 }
