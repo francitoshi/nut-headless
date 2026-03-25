@@ -21,7 +21,7 @@
 package io.nut.headless.io;
 
 import io.nut.base.io.FileUtils;
-import io.nut.base.os.OSName;
+import io.nut.base.os.OS;
 import io.nut.headless.io.virtual.VirtualFile;
 import io.nut.headless.io.virtual.VirtualFileFilter;
 import io.nut.headless.io.virtual.VirtualFiles;
@@ -40,7 +40,7 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 
 public abstract class ForEachFile implements Runnable
 {
-    private static final OSName OS = OSName.getInstance();
+    private static final OS OS = OS.getInstance();
     private static final int BUF_SIZE = 64*1024;
             
     public final int bufSize;
