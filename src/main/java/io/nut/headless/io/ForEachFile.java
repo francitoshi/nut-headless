@@ -40,7 +40,7 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 
 public abstract class ForEachFile implements Runnable
 {
-    private static final OS OS = OS.getInstance();
+    private static final OS os = OS.getInstance();
     private static final int BUF_SIZE = 64*1024;
             
     public final int bufSize;
@@ -73,23 +73,23 @@ public abstract class ForEachFile implements Runnable
         this.filter = filter;
         this.coveredPath = new CoveredPath(options.symlinks);
 
-        if(OS.isPosix())
+        if(os.isPosix())
         {
             autoOmitPaths.add(new File(File.separator + "dev"));
             autoOmitPaths.add(new File(File.separator + "tmp"));
             autoOmitPaths.add(new File(File.separator + "lost+found"));
         }
-        if(OS.isLinux() || OS.isSolaris())
+        if(os.isLinux() || os.isSolaris())
         {
             autoOmitPaths.add(new File(File.separator + "proc"));
         }
-        if (OS.isLinux())
+        if (os.isLinux())
         {
             autoOmitPaths.add(new File(File.separator + "sys"));
             autoOmitPaths.add(new File(File.separator + "var" + File.separator + "run"));
             autoOmitPaths.add(new File(File.separator + "var" + File.separator + "lock"));
         }
-        if (OS.isSolaris())
+        if (os.isSolaris())
         {
             autoOmitPaths.add(new File(File.separator + "devices"));
         }
