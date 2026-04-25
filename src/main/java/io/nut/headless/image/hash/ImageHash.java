@@ -21,6 +21,7 @@
 package io.nut.headless.image.hash;
 
 import io.nut.base.util.Hash;
+import io.nut.base.util.Utils;
 import java.util.Arrays;
 
 /**
@@ -68,5 +69,24 @@ public class ImageHash implements Hash
     public int hashCode()
     {
         return hc;
+    }
+
+    @Override
+    public int compareTo(Hash other)
+    {
+        int cmp = Integer.compare(this.hc, other.hashCode());
+        if(cmp!=0)
+        {
+            if(other instanceof ImageHash)
+            {
+                final ImageHash o = (ImageHash) other;
+                cmp = Utils.compare(this.hash, o.hash);
+            }
+            else
+            {
+                cmp = 1;
+            }
+        }
+        return cmp;
     }
 }

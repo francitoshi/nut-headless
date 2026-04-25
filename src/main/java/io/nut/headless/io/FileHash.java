@@ -20,7 +20,6 @@
  */
 package io.nut.headless.io;
 
-import io.nut.base.util.Hash;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,7 +34,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
  *
  * @author franci
  */
-public class FileHash implements Comparable<FileHash>, Hash
+public class FileHash implements Comparable<FileHash>
 {   
     private final VirtualFile file;
     private final long size;
@@ -219,5 +218,5 @@ public class FileHash implements Comparable<FileHash>, Hash
     {
         return (int)this.size;
     }
-
+    
 }

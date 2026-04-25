@@ -122,4 +122,14 @@ public class StickyImageHash implements Hash
         }
         return hash;
     }
+
+    @Override
+    public int compareTo(Hash other)
+    {
+        if(this.equals(other))
+        {
+            return 0;
+        }
+        return this.compareTo(other);
+    }
 }
