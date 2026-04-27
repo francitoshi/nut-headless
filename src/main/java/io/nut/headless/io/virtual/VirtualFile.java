@@ -32,7 +32,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
  *
  * @author franci
  */
-public class VirtualFile implements /*Comparable<VirtualFile>,*/ Cloneable
+public class VirtualFile implements Comparable<VirtualFile>, Cloneable
 {
     private final VirtualFileSystem fs;
 

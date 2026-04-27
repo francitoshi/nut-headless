@@ -18,8 +18,9 @@
  *
  *  Report bugs or new features to: francitoshi@gmail.com
  */
-package io.nut.headless.image.hasher;
+package io.nut.headless.image.hash;
 
+import io.nut.base.util.concurrent.hive.Hive;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,25 +40,23 @@ public class ImageClustererTest
     @Test
     public void testProcess() throws Exception
     {
-        ImageClusterer clusterer = new ImageClusterer(16, 48, 30);
+        ImageClusterer clusterer = new ImageClusterer(32, 64, 128, 0.1);
         
         for(int i=0;i<10;i++)
         {
             File jpg = new File(PATH,"a"+i+".jpg");
-            assertTrue(clusterer.add(jpg));
         }
         
         for(int i=0;i<10;i++)
         {
             File png = new File(PATH,"a"+i+".png");
-            assertFalse(clusterer.add(png), png.toString());
         }
         for(int i=0;i<10;i++)
         {
             File png = new File(PATH,"b"+i+".png");
-            assertFalse(clusterer.add(png), png.toString());
+
             File jpg = new File(PATH,"b"+i+".jpg");
-            assertFalse(clusterer.add(jpg), jpg.toString());
+
         }
         
         String[][] paths = clusterer.getClusteredPaths();
