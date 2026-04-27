@@ -245,12 +245,7 @@ public class ImageClusterer
     {
         MessageDigest digest = KRIPTO.sha256.get();
         DigestInputStream dis  = new DigestInputStream(in, digest);
-        long t0 = System.nanoTime();
         final BufferedImage original = load(dis);
-        long t1 = System.nanoTime();
-        long ms = TimeUnit.NANOSECONDS.toMillis(t1-t0);
-        if(ms>400) System.err.println("load:"+path+" "+ms+" ms");
-        
         byte[] sha256 = digest.digest();
         int w = original.getWidth();
         int h = original.getHeight();
