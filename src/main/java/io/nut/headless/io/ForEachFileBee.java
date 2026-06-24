@@ -58,11 +58,11 @@ public class ForEachFileBee extends ForEachFile
             {
                 System.out.println("fe=null");
             }
-            fileBee.send(fe);
+            fileBee.accept(fe);
         }
         if (nameBee != null)
         {
-            nameBee.send(fe.toString());
+            nameBee.accept(fe.toString());
         }
     }
 
