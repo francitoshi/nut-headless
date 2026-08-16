@@ -9,7 +9,7 @@ import io.nut.base.cache.Cache;
 import io.nut.base.cache.TinyLFUCache;
 import io.nut.base.crypto.Kripto;
 import io.nut.base.function.CheckedSupplier2;
-import io.nut.base.keyarray.KeyBytes;
+import io.nut.base.keyarray.ByteKey;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -107,7 +107,7 @@ public class ImageClusterer
     private final Map<String,Image> images = new HashMap<>();
     private final List<Cluster> clusters = new ArrayList<>();
     
-    private final Cache<KeyBytes,byte[]> cache = new TinyLFUCache(100_000, Long.MAX_VALUE, true).synchronizedCache();
+    private final Cache<ByteKey,byte[]> cache = new TinyLFUCache(100_000, Long.MAX_VALUE, true).synchronizedCache();
         
     public ImageClusterer(int size, int maxPixelDiff, int maxFailures, double ratioDelta)
     {
@@ -232,7 +232,7 @@ public class ImageClusterer
         byte[] sha256 = digest.digest();
         int w = original.getWidth();
         int h = original.getHeight();
-        KeyBytes key = new KeyBytes(sha256);
+        ByteKey key = new ByteKey(sha256);
         byte[] pixels = cache.get(key);
         if(pixels==null)
         {
