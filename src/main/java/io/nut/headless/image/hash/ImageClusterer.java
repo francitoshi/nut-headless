@@ -227,24 +227,26 @@ public class ImageClusterer
     Image process(String path, InputStream in) throws IOException 
     {
         MessageDigest digest = KRIPTO.sha256.get();
-        DigestInputStream dis  = new DigestInputStream(in, digest);
-        final BufferedImage original = load(dis);
-        byte[] sha256 = digest.digest();
-        int w = original.getWidth();
-        int h = original.getHeight();
-        ByteKey key = new ByteKey(sha256);
-        byte[] pixels = cache.get(key);
-        if(pixels==null)
+        try (DigestInputStream dis = new DigestInputStream(in, digest))
         {
-            BufferedImage resized  = resize(original);
-            pixels = toGrayscaleBytes(resized);
+            final BufferedImage original = load(dis);
+            byte[] sha256 = digest.digest();
+            int w = original.getWidth();
+            int h = original.getHeight();
+            ByteKey key = new ByteKey(sha256);
+            byte[] pixels = cache.get(key);
+            if(pixels==null)
+            {
+                BufferedImage resized  = resize(original);
+                pixels = toGrayscaleBytes(resized);
+            }
+            else
+            {
+                System.err.println(path);
+            }
+
+            return new Image(path, w, h, sha256, pixels, mask(pixels));
         }
-        else
-        {
-            System.err.println(path);
-        }
-        
-        return new Image(path, w, h, sha256, pixels, mask(pixels));
     }
     
     public Cluster add(File file) throws IOException
