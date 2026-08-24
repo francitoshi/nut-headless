@@ -1,22 +1,7 @@
 /*
- * VirtualFilePool.java
- *
- * Copyright (c) 2007-2024 francitoshi@gmail.com
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  Report bugs or new features to: francitoshi@gmail.com
+ * Copyright (C) 2007-2026 francitoshi@gmail.com
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * See LICENSE file in the project root for full license text.
  */
 package io.nut.headless.io.virtual;
 
@@ -50,12 +35,24 @@ public class VirtualFilePool
     private InputStream getEntryInputStream(InputStream in, String entryName) throws IOException, ArchiveException
     {
         final ArchiveInputStream ais = asf.createArchiveInputStream(new BufferedInputStream(in));
-        ArchiveEntry ae = null;
-        while( (ae=ais.getNextEntry())!=null)
+        boolean found = false;
+        try
         {
-            if(entryName.equals(ae.getName()))
+            ArchiveEntry ae = null;
+            while( (ae=ais.getNextEntry())!=null)
             {
-                return ais;
+                if(entryName.equals(ae.getName()))
+                {
+                    found = true;
+                    return ais;
+                }
+            }
+        }
+        finally
+        {
+            if(!found)
+            {
+                ais.close();
             }
         }
         return null;
@@ -118,6 +115,10 @@ public class VirtualFilePool
             return new FileInputStream(paths[0]);
         }
         final InputStream fin = getEntryInputStream(new File(paths[0]), paths[1]);
+        if(fin == null)
+        {
+            throw new FileNotFoundException("'"+paths[0]+VirtualFileSystem.pathSeparator+paths[1]+"' not found");
+        }
         InputStream in = fin;
         StringBuilder curPath = new StringBuilder(paths[0]).append(paths[1]);
         try
