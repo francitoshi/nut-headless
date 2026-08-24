@@ -298,11 +298,7 @@ class ZipVirtualFileSystem implements VirtualFileSystem
     public VirtualFileSystem getParentFile()
     {
         String[] parent = Arrays.copyOf(items, items.length-1);
-        if(parent.length>1)
-        {
-            return new ZipVirtualFileSystem(parent);
-        }
-        if(parent.length==1)
+        if(parent.length>0)
         {
             return new ZipVirtualFileSystem(parent);
         }
