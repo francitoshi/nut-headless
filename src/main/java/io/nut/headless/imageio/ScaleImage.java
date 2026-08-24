@@ -125,9 +125,7 @@ public class ScaleImage
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(image, format, out);
         
-        ByteArrayInputStream bis = new ByteArrayInputStream(out.toByteArray());
-
-        return bis;
+        return new ByteArrayInputStream(out.toByteArray());
     }
 
     public BufferedImage filter(BufferedImage img)
