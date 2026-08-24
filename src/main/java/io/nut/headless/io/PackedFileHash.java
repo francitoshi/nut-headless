@@ -127,19 +127,19 @@ public class PackedFileHash
                 return;
             }
             boolean error = true;
-            InputStream fis = null;
             try
             {
                 MessageDigest sha256 = MessageDigest.getInstance(SHA256);
                 if (size > 0)
                 {
                     byte[] buf = new byte[1024];
-                    fis = file.getInputStream();
-                    int r = fis.read(buf);
-                    fis.close();
-                    if (r > 0)
+                    try (InputStream fis = file.getInputStream())
                     {
-                        sha256.update(buf, 0, r);
+                        int r = fis.read(buf);
+                        if (r > 0)
+                        {
+                            sha256.update(buf, 0, r);
+                        }
                     }
                 }
 
@@ -155,17 +155,6 @@ public class PackedFileHash
                 if (error)
                 {
                     this.exception = true;
-                }
-                try
-                {
-                    if (fis != null)
-                    {
-                        fis.close();
-                    }
-                }
-                catch (IOException ex)
-                {
-                    Logger.getLogger(PackedFileHash.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
