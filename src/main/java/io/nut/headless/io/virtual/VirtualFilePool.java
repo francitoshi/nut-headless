@@ -35,26 +35,15 @@ public class VirtualFilePool
     private InputStream getEntryInputStream(InputStream in, String entryName) throws IOException, ArchiveException
     {
         final ArchiveInputStream ais = asf.createArchiveInputStream(new BufferedInputStream(in));
-        boolean found = false;
-        try
+        ArchiveEntry ae;
+        while((ae=ais.getNextEntry())!=null)
         {
-            ArchiveEntry ae = null;
-            while( (ae=ais.getNextEntry())!=null)
+            if(entryName.equals(ae.getName()))
             {
-                if(entryName.equals(ae.getName()))
-                {
-                    found = true;
-                    return ais;
-                }
+                return ais;
             }
         }
-        finally
-        {
-            if(!found)
-            {
-                ais.close();
-            }
-        }
+        ais.close();
         return null;
     }
     private InputStream getEntryInputStream(File file, String entryName) throws IOException, ArchiveException
