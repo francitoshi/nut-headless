@@ -1,22 +1,7 @@
 /*
- *  SwapImageColor.java
- *
- *  Copyright (C) 2009-2023 francitoshi@gmail.com
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  Report bugs or new features to: francitoshi@gmail.com
+ * Copyright (C) 2009-2026 francitoshi@gmail.com
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * See LICENSE file in the project root for full license text.
  */
 package io.nut.headless.image;
 
@@ -250,19 +235,23 @@ public class SwapImageColor implements Runnable
     public void run()
     {
         done.set(false);
+        if(swap == null)
+        {
+            done.set(true);
+            return;
+        }
         int w = src.getWidth();
         int h = src.getHeight();
-        int t = src.getType();
-        
+
         for(int y=0; y<h;y++)
             for(int x=0; x<w;x++)
-                dst.setRGB(x, y, swap.swap(dst.getRGB(x,y)));
-    
+                dst.setRGB(x, y, swap.swap(src.getRGB(x,y)));
+
         done.set(true);
     }
 
     public String getRGB()
     {
-        return swap.getRGB();
+        return swap == null ? null : swap.getRGB();
     }
 }
