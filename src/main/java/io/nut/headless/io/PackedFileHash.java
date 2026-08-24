@@ -5,7 +5,6 @@
  */
 package io.nut.headless.io;
 
-import io.nut.base.crypto.Digest;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,19 +22,12 @@ import org.apache.commons.compress.archivers.ArchiveException;
  */
 public class PackedFileHash
 {
-    private static final String MD5 = "MD5";
-    private static final String SHA1 = "SHA-1";
-    private static final String[] DEF_ALG =
-    {
-        MD5, SHA1
-    };
-    private static final int bufSize = 64 * 1024;
+    private static final String SHA256 = "SHA-256";
+    private static final int BUF_SIZE = 64 * 1024;
     private final VirtualFile file;
     private final long size;
-    private byte[] fastMD5 = null;
-    private byte[] fastSHA1 = null;
-    private byte[] fullMD5 = null;
-    private byte[] fullSHA1 = null;
+    private byte[] fastHash = null;
+    private byte[] fullHash = null;
     private boolean exception = false;
     private FileDigest digest = null;
     private final Object lock = new Object();
@@ -95,19 +87,11 @@ public class PackedFileHash
             }
             else
             {
-                if (!Arrays.equals(this.getFastMD5(), other.getFastMD5()))
+                if (!Arrays.equals(this.getFastSHA256(), other.getFastSHA256()))
                 {
                     return false;
                 }
-                if (!Arrays.equals(this.getFastSHA1(), other.getFastSHA1()))
-                {
-                    return false;
-                }
-                if (!Arrays.equals(this.getFullMD5(), other.getFullMD5()))
-                {
-                    return false;
-                }
-                if (!Arrays.equals(this.getFullSHA1(), other.getFullSHA1()))
+                if (!Arrays.equals(this.getFullSHA256(), other.getFullSHA256()))
                 {
                     return false;
                 }
@@ -134,109 +118,98 @@ public class PackedFileHash
         return (int) (file.length() % Integer.MAX_VALUE);
     }
 
-    private synchronized void buildFastHash() throws IOException, ArchiveException
+    private void buildFastHash() throws IOException, ArchiveException
     {
-        if (fastMD5 != null && fastSHA1 != null)
+        synchronized (lock)
         {
-            return;
-        }
-        boolean error = true;
-        InputStream fis = null;
-        try
-        {
-            MessageDigest md5 = MessageDigest.getInstance(MD5);
-            MessageDigest sha1 = MessageDigest.getInstance(SHA1);
-            if (size > 0)
+            if (fastHash != null)
             {
-                byte[] buf = new byte[1024];
-                fis = file.getInputStream();
-                int r = fis.read(buf);
-                fis.close();
-                md5.update(buf, 0, r);
-                sha1.update(buf, 0, r);
+                return;
             }
-
-            fastMD5 = md5.digest();
-            fastSHA1 = sha1.digest();
-            error = false;
-        }
-        catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(PackedFileHash.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-            if (error)
-            {
-                this.exception = true;
-            }
+            boolean error = true;
+            InputStream fis = null;
             try
             {
-                if (fis != null)
+                MessageDigest sha256 = MessageDigest.getInstance(SHA256);
+                if (size > 0)
                 {
+                    byte[] buf = new byte[1024];
+                    fis = file.getInputStream();
+                    int r = fis.read(buf);
                     fis.close();
+                    if (r > 0)
+                    {
+                        sha256.update(buf, 0, r);
+                    }
                 }
+
+                fastHash = sha256.digest();
+                error = false;
             }
-            catch (IOException ex)
+            catch (NoSuchAlgorithmException ex)
             {
                 Logger.getLogger(PackedFileHash.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            finally
+            {
+                if (error)
+                {
+                    this.exception = true;
+                }
+                try
+                {
+                    if (fis != null)
+                    {
+                        fis.close();
+                    }
+                }
+                catch (IOException ex)
+                {
+                    Logger.getLogger(PackedFileHash.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
 
     private void buildFullHash() throws IOException, ArchiveException
     {
-        if (fullMD5 != null && fullSHA1 != null)
+        synchronized (lock)
         {
-            return;
-        }
-
-        if (size <= 1024)
-        {
-            fullMD5 = fastMD5;
-            fullSHA1 = fastSHA1;
-            return;
-        }
-        boolean error = true;
-        InputStream fis = null;
-        try
-        {
-            MessageDigest md5 = MessageDigest.getInstance(MD5);
-            MessageDigest sha1 = MessageDigest.getInstance(SHA1);
-            byte[] buf = new byte[bufSize];
-            fis = file.getInputStream();
-            int r;
-
-            while ((r = fis.read(buf)) > 0)
+            if (fullHash != null)
             {
-                md5.update(buf, 0, r);
-                sha1.update(buf, 0, r);
+                return;
             }
 
-            fullMD5 = md5.digest();
-            fullSHA1 = sha1.digest();
-            error = false;
-        }
-        catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(PackedFileHash.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-            if (error)
+            if (size <= 1024)
             {
-                this.exception = true;
+                fullHash = fastHash;
+                return;
             }
-            try
+            boolean error = true;
+            try (InputStream fis = file.getInputStream())
             {
-                if (fis != null)
+                MessageDigest sha256 = MessageDigest.getInstance(SHA256);
+                byte[] buf = new byte[BUF_SIZE];
+                int r;
+
+                while ((r = fis.read(buf)) > 0)
                 {
-                    fis.close();
+                    sha256.update(buf, 0, r);
                 }
+
+                fullHash = sha256.digest();
+                error = false;
             }
-            catch (IOException ex)
+            catch (NoSuchAlgorithmException ex)
             {
                 Logger.getLogger(PackedFileHash.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            finally
+            {
+                if (error)
+                {
+                    this.exception = true;
+                }
             }
         }
     }
@@ -251,40 +224,22 @@ public class PackedFileHash
         return file;
     }
 
-    public byte[] getFastMD5() throws IOException, ArchiveException
+    public byte[] getFastSHA256() throws IOException, ArchiveException
     {
-        if (fastMD5 == null)
+        if (fastHash == null)
         {
             buildFastHash();
         }
-        return fastMD5;
+        return fastHash;
     }
 
-    public byte[] getFastSHA1() throws IOException, ArchiveException
+    public byte[] getFullSHA256() throws IOException, ArchiveException
     {
-        if (fastSHA1 == null)
-        {
-            buildFastHash();
-        }
-        return fastSHA1;
-    }
-
-    public byte[] getFullMD5() throws IOException, ArchiveException
-    {
-        if (fullMD5 == null)
+        if (fullHash == null)
         {
             buildFullHash();
         }
-        return fullMD5;
-    }
-
-    public byte[] getFullSHA1() throws IOException, ArchiveException
-    {
-        if (fullSHA1 == null)
-        {
-            buildFullHash();
-        }
-        return fullSHA1;
+        return fullHash;
     }
     private static final long[] SIZES = FileDigest.buildSizes();
 
