@@ -5,7 +5,7 @@
  */
 package io.nut.headless.io;
 
-import io.nut.base.util.concurrent.hive.Bee;
+import io.nut.base.util.concurrent.actor.Actor;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.io.File;
 import java.io.FileFilter;
@@ -15,13 +15,13 @@ import java.io.IOException;
  *
  * @author franci
  */
-public class ForEachFileBee extends ForEachFile
+public class ForEachFileActor extends ForEachFile
 {
     private final boolean eof;
-    private final Bee<VirtualFile> fileBee;
-    private final Bee<String> nameBee;
+    private final Actor<VirtualFile> fileBee;
+    private final Actor<String> nameBee;
 
-    public ForEachFileBee(File[] file, FileFilter filter, ForEachFileOptions opt, Bee<VirtualFile> fileBee, Bee<String> nameBee, boolean eof) throws IOException
+    public ForEachFileActor(File[] file, FileFilter filter, ForEachFileOptions opt, Actor<VirtualFile> fileBee, Actor<String> nameBee, boolean eof) throws IOException
     {
         super(file, filter,opt);
         this.eof      = eof;
@@ -29,7 +29,7 @@ public class ForEachFileBee extends ForEachFile
         this.nameBee = nameBee;
     }
 
-    public ForEachFileBee(File[] file, ForEachFileOptions opt, Bee<VirtualFile> bee, boolean eof) throws IOException
+    public ForEachFileActor(File[] file, ForEachFileOptions opt, Actor<VirtualFile> bee, boolean eof) throws IOException
     {
         this(file, null, opt, bee, null, eof);
     }
@@ -68,12 +68,12 @@ public class ForEachFileBee extends ForEachFile
         }
     }
 
-    public Bee<VirtualFile> getFileBee()
+    public Actor<VirtualFile> getFileBee()
     {
         return fileBee;
     }
 
-    public Bee<String> getNameBee()
+    public Actor<String> getNameBee()
     {
         return nameBee;
     }
