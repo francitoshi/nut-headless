@@ -5,7 +5,7 @@
  */
 package io.nut.headless.io;
 
-import io.nut.base.util.concurrent.actor.Actor;
+import io.nut.base.concurrent.actor.Actor;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.io.File;
 import java.io.FileFilter;
