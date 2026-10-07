@@ -21,7 +21,7 @@
 package io.nut.headless.image.hash;
 
 import io.nut.base.jca.Digest;
-import io.nut.base.crypto.Kr;
+import io.nut.base.jca.Kr;
 import io.nut.base.util.Byter;
 import io.nut.base.util.Hash;
 import io.nut.headless.image.ScaleDimension;
