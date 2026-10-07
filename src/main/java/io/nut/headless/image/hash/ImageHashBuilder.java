@@ -20,8 +20,8 @@
  */
 package io.nut.headless.image.hash;
 
-import io.nut.base.crypto.Digest;
-import io.nut.base.crypto.Kripto;
+import io.nut.base.jca.Digest;
+import io.nut.base.crypto.Kr;
 import io.nut.base.util.Byter;
 import io.nut.base.util.Hash;
 import io.nut.headless.image.ScaleDimension;
@@ -47,7 +47,7 @@ public class ImageHashBuilder
 {
     private static final AtomicInteger count = new AtomicInteger();
     private static final VirtualFilePool pool = new VirtualFilePool();
-    private static final Kripto KRIPTO = Kripto.getInstance();
+    private static final Kr KRIPTO = Kr.getInstance();
     private static final Digest SHA256 = KRIPTO.sha256;
 
     private final ScaleImage scale;

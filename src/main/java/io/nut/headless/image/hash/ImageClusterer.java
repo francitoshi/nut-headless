@@ -7,7 +7,7 @@ package io.nut.headless.image.hash;
 
 import io.nut.base.cache.Cache;
 import io.nut.base.cache.TinyLFUCache;
-import io.nut.base.crypto.Kripto;
+import io.nut.base.crypto.Kr;
 import io.nut.base.function.CheckedSupplier2;
 import io.nut.base.keyarray.ByteKey;
 import io.nut.headless.io.virtual.VirtualFile;
@@ -36,7 +36,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
  */
 public class ImageClusterer
 {
-    static final Kripto KRIPTO = Kripto.getInstance();
+    static final Kr KRIPTO = Kr.getInstance();
     
     public static class Image
     {
