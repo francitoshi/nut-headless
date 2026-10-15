@@ -5,10 +5,10 @@
  */
 package io.nut.headless.image.hash;
 
-import io.nut.base.cache.Cache;
-import io.nut.base.cache.TinyLFUCache;
+import io.nut.base.commons.cache.Cache;
+import io.nut.base.commons.cache.TinyLFUCache;
 import io.nut.base.function.CheckedSupplier2;
-import io.nut.base.jca.Kr;
+import io.nut.base.commons.jca.Kr;
 import io.nut.base.keyarray.ByteKey;
 import io.nut.headless.io.virtual.VirtualFile;
 import java.awt.image.BufferedImage;

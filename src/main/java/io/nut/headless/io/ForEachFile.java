@@ -21,7 +21,7 @@
 package io.nut.headless.io;
 
 import io.nut.base.io.FileUtils;
-import io.nut.base.os.OS;
+import io.nut.base.commons.lang.OS;
 import io.nut.headless.io.virtual.VirtualFile;
 import io.nut.headless.io.virtual.VirtualFileFilter;
 import io.nut.headless.io.virtual.VirtualFiles;

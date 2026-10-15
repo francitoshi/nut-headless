@@ -5,7 +5,7 @@
  */
 package io.nut.headless.image.hash;
 
-import io.nut.base.util.Comparators;
+import io.nut.base.commons.lang.Comparators;
 import io.nut.base.util.Hash;
 import java.util.Arrays;
 
