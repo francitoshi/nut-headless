@@ -19,8 +19,8 @@ def nutVersion = version
 
 dependencies
 {
-    implementation "io.github.francitoshi:nut-base:${nutVersion}"
-    implementation "io.github.francitoshi:nut-core:${nutVersion}"
+    implementation "com.github.francitoshi:nut-base:${nutVersion}"
+    implementation "com.github.francitoshi:nut-core:${nutVersion}"
 
     compileOnly "org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}"
     compileOnly "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}"
