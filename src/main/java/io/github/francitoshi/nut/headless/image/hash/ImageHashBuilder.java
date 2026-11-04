@@ -7,11 +7,11 @@ package io.github.francitoshi.nut.headless.image.hash;
 
 import io.github.francitoshi.nut.base.commons.jca.Digest;
 import io.github.francitoshi.nut.base.commons.jca.Kr;
+import io.github.francitoshi.nut.base.image.ScaleDimension;
+import io.github.francitoshi.nut.base.image.SimpleScaleDimension;
+import io.github.francitoshi.nut.base.imageio.ScaleImage;
 import io.github.francitoshi.nut.base.util.Byter;
 import io.github.francitoshi.nut.base.util.Hash;
-import io.github.francitoshi.nut.headless.image.ScaleDimension;
-import io.github.francitoshi.nut.headless.image.SimpleScaleDimension;
-import io.github.francitoshi.nut.headless.imageio.ScaleImage;
 import io.github.francitoshi.nut.headless.io.virtual.VirtualFile;
 import io.github.francitoshi.nut.headless.io.virtual.VirtualFilePool;
 import java.awt.image.BufferedImage;
