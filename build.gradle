@@ -40,13 +40,7 @@ java
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
-//    withJavadocJar()
-}
-
-wrapper 
-{
-    gradleVersion = "8.2"
-    distributionType = Wrapper.DistributionType.ALL
+    withJavadocJar()
 }
 
 test 
@@ -67,3 +61,10 @@ publishing
         }
     }
 }
+
+wrapper 
+{
+    gradleVersion = "8.14.8"
+    distributionType = Wrapper.DistributionType.ALL
+}
+
