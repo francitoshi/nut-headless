@@ -1,3 +1,5 @@
+//NUT Headless (NUT Utility Toolkit Headless) - generic java 8 library
+
 plugins 
 {
     id 'java'
